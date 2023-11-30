@@ -52,7 +52,6 @@ mod tests {
     use std::str::FromStr;
 
     use assert2::check;
-    use axum::response::IntoResponse;
     use headers::{CacheControl, ContentType, ETag};
     use http::StatusCode;
     use insta::assert_json_snapshot;
@@ -62,59 +61,63 @@ mod tests {
 
     #[tokio::test]
     async fn no_values() {
-        let sut = crate::new(());
+        let router: axum::Router =
+            axum::Router::new().route("/test", axum::routing::get(|| async { crate::new(()) }));
 
-        let response = sut.into_response();
-        check!(response.status() == StatusCode::OK);
-        check!(response.headers().get("Content-Type").unwrap() == "application/json");
+        let test_server = axum_test::TestServer::new(router).unwrap();
+        let response = test_server.get("/test").await;
 
-        let body = hyper::body::to_bytes(response.into_body()).await.unwrap();
-        check!(body.len() != 0);
-        let body: Value = serde_json::from_slice(&body).unwrap();
+        check!(response.status_code() == StatusCode::OK);
+        check!(response.header("Content-Type") == "application/json");
 
+        let body: Value = response.json();
         assert_json_snapshot!(body, @r###"{}"###);
     }
 
     #[tokio::test]
     async fn hal_example() {
-        let sut = crate::new(json!({
-          "currentlyProcessing": 14,
-          "shippedToday": 20
-        }))
-        .with_link("self", "/orders")
-        .with_link("next", "/orders?page=2")
-        .with_link("find", crate::Link::new("/orders{?id}").templated())
-        .with_embedded(
-            "orders",
-            crate::Hal::new(json!({
-              "total": 30.00,
-              "currency": "USD",
-              "status": "shipped"
-            }))
-            .with_link("self", "/orders/123")
-            .with_link("basket", "/baskets/98712")
-            .with_link("customer", "/customers/7809"),
-        )
-        .with_embedded(
-            "orders",
-            crate::Hal::new(json!({
-              "total": 20.00,
-              "currency": "USD",
-              "status": "processing"
-            }))
-            .with_link("self", "/orders/124")
-            .with_link("basket", "/baskets/97213")
-            .with_link("customer", "/customers/12369"),
+        let router: axum::Router = axum::Router::new().route(
+            "/test",
+            axum::routing::get(|| async {
+                crate::new(json!({
+                  "currentlyProcessing": 14,
+                  "shippedToday": 20
+                }))
+                .with_link("self", "/orders")
+                .with_link("next", "/orders?page=2")
+                .with_link("find", crate::Link::new("/orders{?id}").templated())
+                .with_embedded(
+                    "orders",
+                    crate::Hal::new(json!({
+                      "total": 30.00,
+                      "currency": "USD",
+                      "status": "shipped"
+                    }))
+                    .with_link("self", "/orders/123")
+                    .with_link("basket", "/baskets/98712")
+                    .with_link("customer", "/customers/7809"),
+                )
+                .with_embedded(
+                    "orders",
+                    crate::Hal::new(json!({
+                      "total": 20.00,
+                      "currency": "USD",
+                      "status": "processing"
+                    }))
+                    .with_link("self", "/orders/124")
+                    .with_link("basket", "/baskets/97213")
+                    .with_link("customer", "/customers/12369"),
+                )
+            }),
         );
 
-        let response = sut.into_response();
-        check!(response.status() == StatusCode::OK);
-        check!(response.headers().get("Content-Type").unwrap() == "application/hal+json");
+        let test_server = axum_test::TestServer::new(router).unwrap();
+        let response = test_server.get("/test").await;
 
-        let body = hyper::body::to_bytes(response.into_body()).await.unwrap();
-        check!(body.len() != 0);
-        let body: Value = serde_json::from_slice(&body).unwrap();
+        check!(response.status_code() == StatusCode::OK);
+        check!(response.header("Content-Type") == "application/hal+json");
 
+        let body: Value = response.json();
         assert_json_snapshot!(body, @r###"
         {
           "_links": {
@@ -173,16 +176,20 @@ mod tests {
 
     #[tokio::test]
     async fn with_template() {
-        let sut = crate::new(()).with_template("default", crate::Template::default());
+        let router: axum::Router = axum::Router::new().route(
+            "/test",
+            axum::routing::get(
+                || async { crate::new(()).with_template("default", crate::Template::default()) }
+            ),
+        );
 
-        let response = sut.into_response();
-        check!(response.status() == StatusCode::OK);
-        check!(response.headers().get("Content-Type").unwrap() == "application/prs.hal-forms+json");
+        let test_server = axum_test::TestServer::new(router).unwrap();
+        let response = test_server.get("/test").await;
 
-        let body = hyper::body::to_bytes(response.into_body()).await.unwrap();
-        check!(body.len() != 0);
-        let body: Value = serde_json::from_slice(&body).unwrap();
+        check!(response.status_code() == StatusCode::OK);
+        check!(response.header("Content-Type") == "application/prs.hal-forms+json");
 
+        let body: Value = response.json();
         assert_json_snapshot!(body, @r###"
         {
           "_templates": {
@@ -194,19 +201,25 @@ mod tests {
 
     #[tokio::test]
     async fn with_nested_template() {
-        let sut = crate::new(()).with_embedded(
-            "other",
-            Hal::new(()).with_template("default", crate::Template::default()),
-        );
+        let router: axum::Router =
+            axum::Router::new().route(
+                "/test",
+                axum::routing::get(|| async {
+                    crate::new(()).with_embedded(
+                        "other",
+                        Hal::new(()).with_template("default", crate::Template::default()),
+                    )
+                }),
+            );
 
-        let response = sut.into_response();
-        check!(response.status() == StatusCode::OK);
-        check!(response.headers().get("Content-Type").unwrap() == "application/prs.hal-forms+json");
+        let test_server = axum_test::TestServer::new(router).unwrap();
 
-        let body = hyper::body::to_bytes(response.into_body()).await.unwrap();
-        check!(body.len() != 0);
-        let body: Value = serde_json::from_slice(&body).unwrap();
+        let response = test_server.get("/test").await;
 
+        check!(response.status_code() == StatusCode::OK);
+        check!(response.header("Content-Type") == "application/prs.hal-forms+json");
+
+        let body: Value = response.json();
         assert_json_snapshot!(body, @r###"
         {
           "_embedded": {
@@ -222,40 +235,48 @@ mod tests {
 
     #[tokio::test]
     async fn status_code() {
-        let sut = crate::new(()).with_status_code(StatusCode::ACCEPTED);
+        let router: axum::Router = axum::Router::new().route(
+            "/test",
+            axum::routing::get(|| async { crate::new(()).with_status_code(StatusCode::ACCEPTED) }),
+        );
 
-        let response = sut.into_response();
-        check!(response.status() == StatusCode::ACCEPTED);
-        check!(response.headers().get("Content-Type").unwrap() == "application/json");
+        let test_server = axum_test::TestServer::new(router).unwrap();
 
-        let body = hyper::body::to_bytes(response.into_body()).await.unwrap();
-        check!(body.len() != 0);
-        let body: Value = serde_json::from_slice(&body).unwrap();
+        let response = test_server.get("/test").await;
 
+        check!(response.status_code() == StatusCode::ACCEPTED);
+        check!(response.header("Content-Type") == "application/json");
+
+        let body: Value = response.json();
         assert_json_snapshot!(body, @r###"{}"###);
     }
 
     #[tokio::test]
     async fn headers() {
-        let sut = crate::new(())
-            .with_header(
-                CacheControl::new()
-                    .with_public()
-                    .with_max_age(std::time::Duration::from_secs(3600)),
-            )
-            .with_header(ETag::from_str("\"Hello\"").unwrap())
-            .with_header(ContentType::xml());
+        let router: axum::Router = axum::Router::new().route(
+            "/test",
+            axum::routing::get(|| async {
+                crate::new(())
+                    .with_header(
+                        CacheControl::new()
+                            .with_public()
+                            .with_max_age(std::time::Duration::from_secs(3600)),
+                    )
+                    .with_header(ETag::from_str("\"Hello\"").unwrap())
+                    .with_header(ContentType::xml())
+            }),
+        );
 
-        let response = sut.into_response();
-        check!(response.status() == StatusCode::OK);
-        check!(response.headers().get("Content-Type").unwrap() == "application/json");
-        check!(response.headers().get("Cache-Control").unwrap() == "public, max-age=3600");
-        check!(response.headers().get("ETag").unwrap() == "\"Hello\"");
+        let test_server = axum_test::TestServer::new(router).unwrap();
 
-        let body = hyper::body::to_bytes(response.into_body()).await.unwrap();
-        check!(body.len() != 0);
-        let body: Value = serde_json::from_slice(&body).unwrap();
+        let response = test_server.get("/test").await;
 
+        check!(response.status_code() == StatusCode::OK);
+        check!(response.header("Content-Type") == "application/json");
+        check!(response.header("Cache-Control") == "public, max-age=3600");
+        check!(response.header("ETag") == "\"Hello\"");
+
+        let body: Value = response.json();
         assert_json_snapshot!(body, @r###"{}"###);
     }
 }
