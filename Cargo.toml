@@ -29,3 +29,12 @@ tokio = { version = "1.43.0", features = ["full"] }
 
 [features]
 axum = ["dep:axum"]
+
+[lints.clippy]
+all = { level = "deny", priority = -1 }
+pedantic = { level = "deny", priority = -1 }
+module_name_repetitions = "allow"
+unused_async = "allow"
+unused_self = "allow"
+needless_pass_by_value = "allow"
+ignored_unit_patterns = "allow"
