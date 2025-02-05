@@ -18,6 +18,7 @@ mod tests {
     use serde_json::json;
 
     use super::*;
+    use crate::values::HttpMethod;
 
     #[test]
     fn serialize_empty() {
@@ -521,6 +522,112 @@ mod tests {
                   "type": "text"
                 }
               ]
+            }
+          }
+        }
+        "###);
+    }
+
+    #[test]
+    fn serialize_link_hints() {
+        let sut = Hal::new(()).with_link(
+            "self",
+            Link::new("/").with_hints(
+                LinkHints::default()
+                    .with_allow(HttpMethod::GET)
+                    .with_allow(HttpMethod::POST)
+                    .with_accept_post("application/example+json", LinkHintFormat::default()),
+            ),
+        );
+
+        let result = serde_json::to_value(sut);
+        let_assert!(Ok(value) = result);
+
+        assert_json_snapshot!(value, @r###"
+        {
+          "_links": {
+            "self": {
+              "href": "/",
+              "hints": {
+                "allow": [
+                  "GET",
+                  "POST"
+                ],
+                "accept-post": {
+                  "application/example+json": {}
+                }
+              }
+            }
+          }
+        }
+        "###);
+    }
+
+    #[test]
+    fn serialize_link_hints_full() {
+        let sut = Hal::new(()).with_link(
+            "self",
+            Link::new("/").with_hints(
+                LinkHints::default()
+                    .with_allow(HttpMethod::GET)
+                    .with_allow(HttpMethod::POST)
+                    .with_format(
+                        "application/example+json",
+                        LinkHintFormat::default().with_deprecated(),
+                    )
+                    .with_accept_post("application/example+json", LinkHintFormat::default())
+                    .with_accept_patch("application/merge-patch+json")
+                    .with_accept_range("bytes=0-499")
+                    .with_accept_prefer("foo")
+                    .with_precondition_req_etag()
+                    .with_auth_scheme(LinkHintAuthSchemes::new("Basic").with_realm("Test"))
+                    .with_status_deprecated(),
+            ),
+        );
+
+        let result = serde_json::to_value(sut);
+        let_assert!(Ok(value) = result);
+
+        assert_json_snapshot!(value, @r###"
+        {
+          "_links": {
+            "self": {
+              "href": "/",
+              "hints": {
+                "allow": [
+                  "GET",
+                  "POST"
+                ],
+                "formats": {
+                  "application/example+json": {
+                    "deprecated": true
+                  }
+                },
+                "accept-post": {
+                  "application/example+json": {}
+                },
+                "accept-patch": [
+                  "application/merge-patch+json"
+                ],
+                "accept-ranges": [
+                  "bytes=0-499"
+                ],
+                "accept-prefer": [
+                  "foo"
+                ],
+                "precondition-req": [
+                  "etag"
+                ],
+                "auth-schemes": [
+                  {
+                    "scheme": "Basic",
+                    "realms": [
+                      "Test"
+                    ]
+                  }
+                ],
+                "status": "deprecated"
+              }
             }
           }
         }

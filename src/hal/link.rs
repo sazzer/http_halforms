@@ -1,3 +1,6 @@
+mod link_hints;
+
+pub use link_hints::*;
 use serde::Serialize;
 
 /// Representation of a single Link in a HAL document.
@@ -18,6 +21,8 @@ pub struct Link {
     pub title:       Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hreflang:    Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hints:       Option<LinkHints>,
 }
 
 impl Link {
@@ -36,6 +41,7 @@ impl Link {
             profile:     None,
             title:       None,
             hreflang:    None,
+            hints:       None,
         }
     }
 
@@ -109,6 +115,17 @@ impl Link {
         S: ToString,
     {
         self.hreflang = Some(value.to_string());
+
+        self
+    }
+
+    /// Specify the hreflang value on the link.
+    #[must_use]
+    pub fn with_hints<V>(mut self, value: V) -> Self
+    where
+        V: Into<LinkHints>,
+    {
+        self.hints = Some(value.into());
 
         self
     }
