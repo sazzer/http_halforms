@@ -11,52 +11,52 @@ pub enum HttpMethod {
 /// Enumeration of standard supported Content Types that can be used in templates.
 #[derive(Debug, derive_more::Display)]
 pub enum TemplateContentType {
-    #[display(fmt = "application/json")]
+    #[display("application/json")]
     Json,
-    #[display(fmt = "application/x-www-form-urlencoded")]
+    #[display("application/x-www-form-urlencoded")]
     Form,
 }
 
 /// Enumeration of values for field types.
 #[derive(Debug, derive_more::Display)]
 pub enum TemplatePropertyType {
-    #[display(fmt = "hidden")]
+    #[display("hidden")]
     Hidden,
-    #[display(fmt = "text")]
+    #[display("text")]
     Text,
-    #[display(fmt = "search")]
+    #[display("search")]
     Search,
-    #[display(fmt = "tel")]
+    #[display("tel")]
     Tel,
-    #[display(fmt = "url")]
+    #[display("url")]
     Url,
-    #[display(fmt = "email")]
+    #[display("email")]
     Email,
-    #[display(fmt = "password")]
+    #[display("password")]
     Password,
-    #[display(fmt = "datetime")]
+    #[display("datetime")]
     DateTime,
-    #[display(fmt = "date")]
+    #[display("date")]
     Date,
-    #[display(fmt = "month")]
+    #[display("month")]
     Month,
-    #[display(fmt = "week")]
+    #[display("week")]
     Week,
-    #[display(fmt = "time")]
+    #[display("time")]
     Time,
-    #[display(fmt = "datetime-local")]
+    #[display("datetime-local")]
     DateTimeLocal,
-    #[display(fmt = "number")]
+    #[display("number")]
     Number,
-    #[display(fmt = "range")]
+    #[display("range")]
     Range,
-    #[display(fmt = "color")]
+    #[display("color")]
     Color,
-    #[display(fmt = "checkbox")]
+    #[display("checkbox")]
     Checkbox,
-    #[display(fmt = "radio")]
+    #[display("radio")]
     Radio,
-    #[display(fmt = "file")]
+    #[display("file")]
     File,
 }
 
@@ -64,242 +64,242 @@ pub enum TemplatePropertyType {
 /// Derived from the IANA list at <https://www.iana.org/assignments/link-relations/link-relations.xhtml>.
 #[derive(Debug, derive_more::Display)]
 pub enum LinkRelation {
-    #[display(fmt = "about")]
+    #[display("about")]
     About,
-    #[display(fmt = "acl")]
+    #[display("acl")]
     Acl,
-    #[display(fmt = "alternate")]
+    #[display("alternate")]
     Alternate,
-    #[display(fmt = "amphtml")]
+    #[display("amphtml")]
     Amphtml,
-    #[display(fmt = "appendix")]
+    #[display("appendix")]
     Appendix,
-    #[display(fmt = "apple-touch-icon")]
+    #[display("apple-touch-icon")]
     AppleTouchIcon,
-    #[display(fmt = "apple-touch-startup-image")]
+    #[display("apple-touch-startup-image")]
     AppleTouchStartupImage,
-    #[display(fmt = "archives")]
+    #[display("archives")]
     Archives,
-    #[display(fmt = "author")]
+    #[display("author")]
     Author,
-    #[display(fmt = "blocked-by")]
+    #[display("blocked-by")]
     BlockedBy,
-    #[display(fmt = "bookmark")]
+    #[display("bookmark")]
     Bookmark,
-    #[display(fmt = "canonical")]
+    #[display("canonical")]
     Canonical,
-    #[display(fmt = "chapter")]
+    #[display("chapter")]
     Chapter,
-    #[display(fmt = "cite-as")]
+    #[display("cite-as")]
     CiteAs,
-    #[display(fmt = "collection")]
+    #[display("collection")]
     Collection,
-    #[display(fmt = "contents")]
+    #[display("contents")]
     Contents,
-    #[display(fmt = "convertedFrom")]
+    #[display("convertedFrom")]
     ConvertedFrom,
-    #[display(fmt = "copyright")]
+    #[display("copyright")]
     Copyright,
-    #[display(fmt = "create-form")]
+    #[display("create-form")]
     CreateForm,
-    #[display(fmt = "current")]
+    #[display("current")]
     Current,
-    #[display(fmt = "describedby")]
+    #[display("describedby")]
     Describedby,
-    #[display(fmt = "describes")]
+    #[display("describes")]
     Describes,
-    #[display(fmt = "disclosure")]
+    #[display("disclosure")]
     Disclosure,
-    #[display(fmt = "dns-prefetch")]
+    #[display("dns-prefetch")]
     DnsPrefetch,
-    #[display(fmt = "duplicate")]
+    #[display("duplicate")]
     Duplicate,
-    #[display(fmt = "edit")]
+    #[display("edit")]
     Edit,
-    #[display(fmt = "edit-form")]
+    #[display("edit-form")]
     EditForm,
-    #[display(fmt = "edit-media")]
+    #[display("edit-media")]
     EditMedia,
-    #[display(fmt = "enclosure")]
+    #[display("enclosure")]
     Enclosure,
-    #[display(fmt = "external")]
+    #[display("external")]
     External,
-    #[display(fmt = "first")]
+    #[display("first")]
     First,
-    #[display(fmt = "glossary")]
+    #[display("glossary")]
     Glossary,
-    #[display(fmt = "help")]
+    #[display("help")]
     Help,
-    #[display(fmt = "hosts")]
+    #[display("hosts")]
     Hosts,
-    #[display(fmt = "hub")]
+    #[display("hub")]
     Hub,
-    #[display(fmt = "icon")]
+    #[display("icon")]
     Icon,
-    #[display(fmt = "index")]
+    #[display("index")]
     Index,
-    #[display(fmt = "intervalAfter")]
+    #[display("intervalAfter")]
     IntervalAfter,
-    #[display(fmt = "intervalBefore")]
+    #[display("intervalBefore")]
     IntervalBefore,
-    #[display(fmt = "intervalContains")]
+    #[display("intervalContains")]
     IntervalContains,
-    #[display(fmt = "intervalDisjoint")]
+    #[display("intervalDisjoint")]
     IntervalDisjoint,
-    #[display(fmt = "intervalDuring")]
+    #[display("intervalDuring")]
     IntervalDuring,
-    #[display(fmt = "intervalEquals")]
+    #[display("intervalEquals")]
     IntervalEquals,
-    #[display(fmt = "intervalFinishedBy")]
+    #[display("intervalFinishedBy")]
     IntervalFinishedBy,
-    #[display(fmt = "intervalFinishes")]
+    #[display("intervalFinishes")]
     IntervalFinishes,
-    #[display(fmt = "intervalIn")]
+    #[display("intervalIn")]
     IntervalIn,
-    #[display(fmt = "intervalMeets")]
+    #[display("intervalMeets")]
     IntervalMeets,
-    #[display(fmt = "intervalMetBy")]
+    #[display("intervalMetBy")]
     IntervalMetBy,
-    #[display(fmt = "intervalOverlappedBy")]
+    #[display("intervalOverlappedBy")]
     IntervalOverlappedBy,
-    #[display(fmt = "intervalOverlaps")]
+    #[display("intervalOverlaps")]
     IntervalOverlaps,
-    #[display(fmt = "intervalStartedBy")]
+    #[display("intervalStartedBy")]
     IntervalStartedBy,
-    #[display(fmt = "intervalStarts")]
+    #[display("intervalStarts")]
     IntervalStarts,
-    #[display(fmt = "item")]
+    #[display("item")]
     Item,
-    #[display(fmt = "last")]
+    #[display("last")]
     Last,
-    #[display(fmt = "latest-version")]
+    #[display("latest-version")]
     LatestVersion,
-    #[display(fmt = "license")]
+    #[display("license")]
     License,
-    #[display(fmt = "lrdd")]
+    #[display("lrdd")]
     Lrdd,
-    #[display(fmt = "manifest")]
+    #[display("manifest")]
     Manifest,
-    #[display(fmt = "mask-icon")]
+    #[display("mask-icon")]
     MaskIcon,
-    #[display(fmt = "media-feed")]
+    #[display("media-feed")]
     MediaFeed,
-    #[display(fmt = "memento")]
+    #[display("memento")]
     Memento,
-    #[display(fmt = "micropub")]
+    #[display("micropub")]
     Micropub,
-    #[display(fmt = "modulepreload")]
+    #[display("modulepreload")]
     Modulepreload,
-    #[display(fmt = "monitor")]
+    #[display("monitor")]
     Monitor,
-    #[display(fmt = "monitor-group")]
+    #[display("monitor-group")]
     MonitorGroup,
-    #[display(fmt = "next")]
+    #[display("next")]
     Next,
-    #[display(fmt = "next-archive")]
+    #[display("next-archive")]
     NextArchive,
-    #[display(fmt = "nofollow")]
+    #[display("nofollow")]
     Nofollow,
-    #[display(fmt = "noopener")]
+    #[display("noopener")]
     Noopener,
-    #[display(fmt = "noreferrer")]
+    #[display("noreferrer")]
     Noreferrer,
-    #[display(fmt = "opener")]
+    #[display("opener")]
     Opener,
-    #[display(fmt = "openid2.local_id")]
+    #[display("openid2.local_id")]
     Openid2LocalId,
-    #[display(fmt = "openid2.provider")]
+    #[display("openid2.provider")]
     Openid2Provider,
-    #[display(fmt = "original")]
+    #[display("original")]
     Original,
-    #[display(fmt = "P3Pv1")]
+    #[display("P3Pv1")]
     P3Pv1,
-    #[display(fmt = "payment")]
+    #[display("payment")]
     Payment,
-    #[display(fmt = "pingback")]
+    #[display("pingback")]
     Pingback,
-    #[display(fmt = "preconnect")]
+    #[display("preconnect")]
     Preconnect,
-    #[display(fmt = "predecessor-version")]
+    #[display("predecessor-version")]
     PredecessorVersion,
-    #[display(fmt = "prefetch")]
+    #[display("prefetch")]
     Prefetch,
-    #[display(fmt = "preload")]
+    #[display("preload")]
     Preload,
-    #[display(fmt = "prerender")]
+    #[display("prerender")]
     Prerender,
-    #[display(fmt = "prev")]
+    #[display("prev")]
     Prev,
-    #[display(fmt = "preview")]
+    #[display("preview")]
     Preview,
-    #[display(fmt = "previous")]
+    #[display("previous")]
     Previous,
-    #[display(fmt = "prev-archive")]
+    #[display("prev-archive")]
     PrevArchive,
-    #[display(fmt = "privacy-policy")]
+    #[display("privacy-policy")]
     PrivacyPolicy,
-    #[display(fmt = "profile")]
+    #[display("profile")]
     Profile,
-    #[display(fmt = "publication")]
+    #[display("publication")]
     Publication,
-    #[display(fmt = "related")]
+    #[display("related")]
     Related,
-    #[display(fmt = "restconf")]
+    #[display("restconf")]
     Restconf,
-    #[display(fmt = "replies")]
+    #[display("replies")]
     Replies,
-    #[display(fmt = "ruleinput")]
+    #[display("ruleinput")]
     Ruleinput,
-    #[display(fmt = "search")]
+    #[display("search")]
     Search,
-    #[display(fmt = "section")]
+    #[display("section")]
     Section,
-    #[display(fmt = "self")]
+    #[display("self")]
     SelfLink,
-    #[display(fmt = "service")]
+    #[display("service")]
     Service,
-    #[display(fmt = "service-desc")]
+    #[display("service-desc")]
     ServiceDesc,
-    #[display(fmt = "service-doc")]
+    #[display("service-doc")]
     ServiceDoc,
-    #[display(fmt = "service-meta")]
+    #[display("service-meta")]
     ServiceMeta,
-    #[display(fmt = "sponsored")]
+    #[display("sponsored")]
     Sponsored,
-    #[display(fmt = "start")]
+    #[display("start")]
     Start,
-    #[display(fmt = "status")]
+    #[display("status")]
     Status,
-    #[display(fmt = "stylesheet")]
+    #[display("stylesheet")]
     Stylesheet,
-    #[display(fmt = "subsection")]
+    #[display("subsection")]
     Subsection,
-    #[display(fmt = "successor-version")]
+    #[display("successor-version")]
     SuccessorVersion,
-    #[display(fmt = "sunset")]
+    #[display("sunset")]
     Sunset,
-    #[display(fmt = "tag")]
+    #[display("tag")]
     Tag,
-    #[display(fmt = "terms-of-service")]
+    #[display("terms-of-service")]
     TermsOfService,
-    #[display(fmt = "timegate")]
+    #[display("timegate")]
     Timegate,
-    #[display(fmt = "timemap")]
+    #[display("timemap")]
     Timemap,
-    #[display(fmt = "type")]
+    #[display("type")]
     Type,
-    #[display(fmt = "ugc")]
+    #[display("ugc")]
     Ugc,
-    #[display(fmt = "up")]
+    #[display("up")]
     Up,
-    #[display(fmt = "version-history")]
+    #[display("version-history")]
     VersionHistory,
-    #[display(fmt = "via")]
+    #[display("via")]
     Via,
-    #[display(fmt = "webmention")]
+    #[display("webmention")]
     Webmention,
-    #[display(fmt = "working-copy")]
+    #[display("working-copy")]
     WorkingCopy,
-    #[display(fmt = "working-copy-of")]
+    #[display("working-copy-of")]
     WorkingCopyOf,
 }
